@@ -2,6 +2,8 @@
 
 > **Kinetic DOM Physics, Procedural Sound Synthesizer & Interactive Game Suite**
 
+🌐 **Live Website**: [https://mahesh-yennam.github.io/BrickLab/](https://mahesh-yennam.github.io/BrickLab/)
+
 ![BrickLab Preview](preview.png)
 
 **BrickLab** is an interactive, browser-native playground that transforms basic DOM elements into a tactile, spring-physics matrix. Featuring procedural Web Audio synthesis, 60fps canvas particle explosions, and multiple game modes, BrickLab runs 100% offline with **zero external dependencies**.

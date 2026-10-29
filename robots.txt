@@ -2,5 +2,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: sitemap.xml
+Sitemap: https://mahesh-yennam.github.io/BrickLab/sitemap.xml
 
