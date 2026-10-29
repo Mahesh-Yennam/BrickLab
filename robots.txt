@@ -1,0 +1,6 @@
+# BrickLab Robots Directives
+User-agent: *
+Allow: /
+
+Sitemap: sitemap.xml
+

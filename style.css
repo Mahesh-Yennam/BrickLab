@@ -1,0 +1,619 @@
+/* ==========================================================================
+   BrickLab - Interactive Kinetic DOM Manipulation Stylesheet
+   Modern Glassmorphic Dark UI, Fluid Spring Physics, Neon Aesthetics
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap');
+
+:root {
+  /* Dynamic Palette (Defaults: Cyber Neon) */
+  --bg-base: #0a0d14;
+  --bg-gradient: radial-gradient(circle at 50% 20%, #151a28 0%, #080a0f 100%);
+  --surface-glass: rgba(22, 27, 44, 0.65);
+  --surface-glass-hover: rgba(30, 38, 62, 0.85);
+  --border-glass: rgba(255, 255, 255, 0.08);
+  --border-focus: rgba(0, 240, 255, 0.6);
+  --text-main: #f0f4fc;
+  --text-muted: #8a96b0;
+  
+  /* Theme Accents (Cyber Neon) */
+  --accent-cyan: #00f0ff;
+  --accent-magenta: #ff0077;
+  --accent-amber: #ffb703;
+  --accent-violet: #7928ca;
+  --accent-emerald: #00f59b;
+  
+  /* Physics Easing */
+  --spring-easing: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --smooth-easing: cubic-bezier(0.16, 1, 0.3, 1);
+  
+  /* Layout Dimensions */
+  --matrix-max-width: 900px;
+  --row-height: 85px;
+  --brick-gap: 12px;
+  --border-radius-sm: 8px;
+  --border-radius-md: 14px;
+  --border-radius-lg: 20px;
+}
+
+/* ==========================================================================
+   Theme Variations
+   ========================================================================== */
+
+body[data-theme="synthwave"] {
+  --bg-base: #10081d;
+  --bg-gradient: radial-gradient(circle at 50% 20%, #261140 0%, #0d0617 100%);
+  --surface-glass: rgba(38, 17, 64, 0.6);
+  --accent-cyan: #ff007f;
+  --accent-magenta: #7928ca;
+  --accent-amber: #ff8800;
+  --accent-violet: #00f0ff;
+  --accent-emerald: #ffe600;
+}
+
+body[data-theme="emerald"] {
+  --bg-base: #06140e;
+  --bg-gradient: radial-gradient(circle at 50% 20%, #0c2b1e 0%, #040d09 100%);
+  --surface-glass: rgba(12, 43, 30, 0.6);
+  --accent-cyan: #00f59b;
+  --accent-magenta: #00d2be;
+  --accent-amber: #b8ff00;
+  --accent-violet: #10b981;
+  --accent-emerald: #34d399;
+}
+
+body[data-theme="obsidian"] {
+  --bg-base: #0d0e11;
+  --bg-gradient: radial-gradient(circle at 50% 20%, #22252e 0%, #0a0b0d 100%);
+  --surface-glass: rgba(28, 32, 41, 0.65);
+  --accent-cyan: #f59e0b;
+  --accent-magenta: #e0b064;
+  --accent-amber: #fef08a;
+  --accent-violet: #d97706;
+  --accent-emerald: #fbbf24;
+}
+
+/* ==========================================================================
+   Global Reset & Base Setup
+   ========================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg-base);
+  background-image: var(--bg-gradient);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 16px;
+  overflow-x: hidden;
+  position: relative;
+  user-select: none;
+}
+
+/* Background Ambient Glow Lights */
+body::before, body::after {
+  content: '';
+  position: fixed;
+  width: 450px;
+  height: 450px;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(140px);
+  opacity: 0.18;
+  z-index: 0;
+  transition: background 0.8s ease;
+}
+
+body::before {
+  top: -100px;
+  left: 10%;
+  background: var(--accent-cyan);
+}
+
+body::after {
+  bottom: -100px;
+  right: 10%;
+  background: var(--accent-magenta);
+}
+
+/* Canvas Particle Layer */
+#particle-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 99;
+}
+
+/* ==========================================================================
+   App Shell & Containers
+   ========================================================================== */
+
+.app-wrapper {
+  width: 100%;
+  max-width: var(--matrix-max-width);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 1;
+}
+
+/* Header Section */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px 24px;
+  background: var(--surface-glass);
+  border: 1px solid var(--border-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.brand-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-magenta));
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.35);
+  font-size: 22px;
+}
+
+.brand-titles h1 {
+  font-size: 1.45rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  background: linear-gradient(90deg, #ffffff, #c2d4f8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-titles p {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+/* Live Stats Bar */
+.stats-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--border-radius-sm);
+}
+
+.stat-label {
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+}
+
+.stat-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+}
+
+.stat-val.combo {
+  color: var(--accent-amber);
+}
+
+/* ==========================================================================
+   Control Deck & Toolbar
+   ========================================================================== */
+
+.control-deck {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: var(--surface-glass);
+  border: 1px solid var(--border-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 14px 20px;
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.control-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.button-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.group-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-right: 4px;
+}
+
+/* Interactive Pill Buttons */
+.pill-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+  padding: 7px 14px;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: 20px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.pill-btn:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: var(--text-main);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.pill-btn.active {
+  background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(255, 0, 119, 0.2));
+  color: #fff;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.3);
+}
+
+.action-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-main);
+  padding: 7px 14px;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.action-btn:active {
+  transform: translateY(1px);
+}
+
+.action-btn.icon-only {
+  padding: 7px 10px;
+  font-size: 1rem;
+}
+
+/* Game Status Banner for Memory Rush Mode */
+.game-banner {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  background: linear-gradient(90deg, rgba(0, 240, 255, 0.15), rgba(255, 0, 119, 0.15));
+  border: 1px solid var(--accent-cyan);
+  border-radius: var(--border-radius-sm);
+  animation: bannerFade 0.3s ease;
+}
+
+.game-banner.visible {
+  display: flex;
+}
+
+.banner-text {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.banner-action-btn {
+  background: var(--accent-cyan);
+  color: #000;
+  border: none;
+  font-weight: 700;
+  font-size: 0.78rem;
+  padding: 5px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.banner-action-btn:hover {
+  filter: brightness(1.15);
+  transform: scale(1.04);
+}
+
+/* ==========================================================================
+   The Main Matrix Stage
+   ========================================================================== */
+
+.matrix-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--brick-gap);
+  width: 100%;
+  padding: 24px;
+  background: rgba(14, 18, 28, 0.5);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--border-radius-lg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  perspective: 1000px;
+}
+
+/* Outer Row Container */
+.outer-row {
+  display: flex;
+  width: 100%;
+  height: var(--row-height);
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--border-radius-md);
+  gap: var(--brick-gap);
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.outer-row:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
+}
+
+/* Brick (Inner Box) */
+.brick {
+  flex: 1 1 0;
+  height: 100%;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  
+  /* Fluid spring transition */
+  transition: flex-grow 0.45s var(--spring-easing),
+              transform 0.25s var(--smooth-easing),
+              filter 0.25s ease,
+              opacity 0.3s ease,
+              box-shadow 0.3s ease;
+  
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  transform: translateZ(0);
+  will-change: flex-grow, transform, box-shadow;
+}
+
+/* Brick Inner Sheen Accent */
+.brick::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 45%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 100%);
+  border-radius: var(--border-radius-sm) var(--border-radius-sm) 0 0;
+  pointer-events: none;
+}
+
+/* Brick Index Number */
+.brick-label {
+  opacity: 0.6;
+  font-size: 0.78rem;
+  letter-spacing: 0.5px;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.brick:hover .brick-label {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+/* Hover & Active States */
+.brick:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), inset 0 0 12px rgba(255, 255, 255, 0.4);
+  filter: brightness(1.15);
+  z-index: 2;
+}
+
+.brick:active {
+  transform: scale(0.97);
+}
+
+/* Shattered State for Zen Mode */
+.brick.shattered {
+  opacity: 0 !important;
+  transform: scale(0.4) rotate(15deg) !important;
+  pointer-events: none !important;
+  filter: blur(4px) !important;
+}
+
+/* Flashing highlight for Memory Game or Ripple */
+.brick.flash-active {
+  filter: brightness(2.2) saturate(1.4) !important;
+  box-shadow: 0 0 35px #ffffff, inset 0 0 20px #ffffff !important;
+  transform: scale(1.06) !important;
+  z-index: 10 !important;
+}
+
+/* Ripple Pulse Animation */
+@keyframes ripplePulse {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.08) translateY(-4px);
+    filter: brightness(1.7) saturate(1.5);
+    box-shadow: 0 0 25px currentColor;
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+.brick.ripple-anim {
+  animation: ripplePulse 0.45s ease-out;
+}
+
+/* Shake Animation on Wrong Guess */
+@keyframes shakeGrid {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-8px); }
+  40%, 80% { transform: translateX(8px); }
+}
+
+.matrix-stage.shake {
+  animation: shakeGrid 0.4s ease;
+}
+
+/* ==========================================================================
+   Footer & Keyboard Discovery Guide
+   ========================================================================== */
+
+.app-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 12px 20px;
+  background: var(--surface-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--border-radius-md);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.shortcuts-list {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.kbd-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+}
+
+kbd {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: #fff;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* ==========================================================================
+   Responsive Adaptations
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  :root {
+    --row-height: 70px;
+    --brick-gap: 8px;
+  }
+  
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .stats-bar {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .control-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .button-group {
+    width: 100%;
+  }
+  
+  .matrix-stage {
+    padding: 14px;
+  }
+  
+  .app-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+

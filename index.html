@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrickLab // Interactive Kinetic Sandbox & Physics Playground</title>
+  <meta name="description" content="BrickLab is a kinetic DOM manipulation playground featuring fluid spring physics, procedural Web Audio synthesis, canvas particle explosions, and interactive puzzle modes.">
+  <meta name="theme-color" content="#00f0ff">
+
+  <!-- Favicon & PWA Manifest -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="manifest" href="site.webmanifest">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="BrickLab // Interactive Kinetic Sandbox">
+  <meta property="og:description" content="Kinetic DOM manipulation playground with spring physics, Web Audio synthesis, and canvas particles.">
+  <meta property="og:image" content="preview.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="BrickLab // Interactive Kinetic Sandbox">
+  <meta name="twitter:description" content="Kinetic DOM manipulation playground with spring physics, Web Audio synthesis, and canvas particles.">
+  <meta name="twitter:image" content="preview.png">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body data-theme="cyber">
+
+  <!-- Hardware-accelerated Particle Overlay Canvas -->
+  <canvas id="particle-canvas"></canvas>
+
+  <div class="app-wrapper">
+
+    <!-- Header Section with Live Stats -->
+    <header class="app-header">
+      <div class="brand-section">
+        <div class="brand-badge">🧪</div>
+        <div class="brand-titles">
+          <h1>BRICKLAB</h1>
+          <p>Kinetic DOM Physics, Sound Synthesizer & Game Suite</p>
+        </div>
+      </div>
+
+      <!-- Live Interactive Stats -->
+      <div class="stats-bar">
+        <div class="stat-item">
+          <span class="stat-label">Score</span>
+          <span class="stat-val" id="stat-score">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Combo</span>
+          <span class="stat-val combo" id="stat-combo">1x</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Interactions</span>
+          <span class="stat-val" id="stat-clicks">0</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Interactive Control Deck -->
+    <section class="control-deck">
+      <!-- Mode Selection Row -->
+      <div class="control-row">
+        <div class="button-group" id="mode-group">
+          <span class="group-label">Mode</span>
+          <button class="pill-btn active" data-mode="wave">
+            <span>🌊</span> Fluid Wave
+          </button>
+          <button class="pill-btn" data-mode="cascade">
+            <span>🎨</span> Color Ripple
+          </button>
+          <button class="pill-btn" data-mode="shatter">
+            <span>💥</span> Zen Shatter
+          </button>
+          <button class="pill-btn" data-mode="memory">
+            <span>🧠</span> Memory Rush
+          </button>
+        </div>
+
+        <!-- Quick Action Buttons -->
+        <div class="button-group">
+          <button class="action-btn icon-only" id="btn-sound" title="Toggle Sound (M)">
+            <span id="sound-icon">🔊</span>
+          </button>
+          <button class="action-btn" id="btn-shuffle" title="Shuffle Colors (Space)">
+            <span>🎲</span> Shuffle
+          </button>
+          <button class="action-btn" id="btn-rebuild" title="Rebuild Matrix (R)">
+            <span>🔄</span> Rebuild
+          </button>
+        </div>
+      </div>
+
+      <!-- Settings & Theme Row -->
+      <div class="control-row">
+        <!-- Grid Dimension Selector -->
+        <div class="button-group" id="grid-group">
+          <span class="group-label">Grid</span>
+          <button class="pill-btn active" data-grid="3">3 × 3</button>
+          <button class="pill-btn" data-grid="4">4 × 4</button>
+          <button class="pill-btn" data-grid="5">5 × 5</button>
+        </div>
+
+        <!-- Visual Theme Selector -->
+        <div class="button-group" id="theme-group">
+          <span class="group-label">Theme</span>
+          <button class="pill-btn active" data-theme="cyber">Cyber</button>
+          <button class="pill-btn" data-theme="synthwave">Synthwave</button>
+          <button class="pill-btn" data-theme="emerald">Emerald</button>
+          <button class="pill-btn" data-theme="obsidian">Obsidian</button>
+        </div>
+      </div>
+
+      <!-- Memory Game HUD Banner -->
+      <div class="game-banner" id="game-banner">
+        <span class="banner-text" id="game-banner-text">Level 1: Watch the sequence...</span>
+        <button class="banner-action-btn" id="btn-start-game">Start Sequence</button>
+      </div>
+    </section>
+
+    <!-- Main Dynamic Brick Matrix Stage -->
+    <main class="matrix-stage" id="matrix-stage">
+      <!-- Dynamically generated rows and bricks go here -->
+    </main>
+
+    <!-- Interactive Key Discovery Footer -->
+    <footer class="app-footer">
+      <div class="shortcuts-list">
+        <span class="kbd-badge"><kbd>1</kbd>-<kbd>4</kbd> Switch Modes</span>
+        <span class="kbd-badge"><kbd>Space</kbd> Ripple Wave</span>
+        <span class="kbd-badge"><kbd>R</kbd> Rebuild Matrix</span>
+        <span class="kbd-badge"><kbd>M</kbd> Toggle Audio</span>
+      </div>
+      <div>Designed with pure Vanilla JS & Web Audio API</div>
+    </footer>
+
+  </div>
+
+  <!-- Main Engine Script -->
+  <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,26 @@
+{
+  "name": "BrickLab // Interactive Kinetic Sandbox",
+  "short_name": "BrickLab",
+  "description": "Interactive kinetic DOM physics, procedural Web Audio synthesizer, and canvas particle game suite.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a0d14",
+  "theme_color": "#00f0ff",
+  "orientation": "any",
+  "categories": ["games", "entertainment", "developer"],
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "preview.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
+
